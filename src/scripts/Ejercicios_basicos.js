@@ -55,3 +55,7 @@ export const divisiblePor3 = (array) => {
 
     return { divisible, indice }
 }
+
+/**
+ * 
+ */
