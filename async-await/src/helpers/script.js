@@ -42,3 +42,21 @@ export const getUsersAsyncAwait = async () => {
  * y que guarde la informacion en el localStorage
  */
 
+export const getPeople = () => {
+    const url = import.meta.env.VITE_API_URL_2;
+    const data = fetch(url);
+    data.then((response) => {
+        if(!response.ok) {
+            throw new Error('Error en la peticion');
+        }
+        console.log("La respuesta es:", response);
+        return response.json();
+    })
+    .then((data) => {
+        console.log("La respuesta es:", data);
+        localStorage.setItem("personajes", JSON.stringify(data));
+    })
+    .catch((error) => {
+        console.log("Error data:", error);
+    });
+}
