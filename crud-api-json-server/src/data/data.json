@@ -1,0 +1,81 @@
+{
+    "productos": [
+        {
+            "id":1, 
+            "nombre": "Producto 1", 
+            "precio": 100, 
+            "stock": 10, 
+            "imagen": "https://picsum.photos/200/300?random=1", 
+            "categoria": 1
+        },
+        {
+            "id":2, 
+            "nombre": "Producto 2", 
+            "precio": 200, 
+            "stock": 20, 
+            "imagen": "https://picsum.photos/200/300?random=2", 
+            "categoria": 2
+        },
+        {
+            "id":3, 
+            "nombre": "Producto 3", 
+            "precio": 300, 
+            "stock": 30, 
+            "imagen": "https://picsum.photos/200/300?random=3", 
+            "categoria": 1
+        },
+        {
+            "id":4, 
+            "nombre": "Producto 4", 
+            "precio": 400, 
+            "stock": 40, 
+            "imagen": "https://picsum.photos/200/300?random=4", 
+            "categoria": 2
+        }
+    ],
+    "categorias":[
+        {
+            "id":1, 
+            "nombre": "Electronica"
+        },
+        {
+            "id":2, 
+            "nombre": "Ropa"
+        }
+    ],
+    "comentarios":[
+        {
+            "id":1, 
+            "comentario": "Este producto es muy bueno", 
+            "producto": 1,
+            "usuario": "Pepe",
+            "Valoracion":5
+        },
+        {
+            "id":2, 
+            "comentario": "Este producto es muy caro", 
+            "producto": 2,
+            "usuario":"Maria",
+            "Valoracion":1
+        },
+        {
+            "id":3, 
+            "comentario": "Este producto es muy caro", 
+            "producto": 3,
+            "usuario":"Juan",
+            "Valoracion":5
+        },
+        {
+            "id":4, 
+            "comentario": "Este producto es muy caro", 
+            "producto": 4,
+            "usuario":"Jose",
+            "Valoracion":3
+        }
+    ],
+    "historialPrecios":[
+        {
+            
+        }
+    ]
+}

@@ -1,7 +1,9 @@
-import { getUsers, getUsersAsyncAwait, getPeople } from './helpers/script.js';
+import { getUsers, getUsersAsyncAwait, getPeople, fetchAllCharactersAsyncAwait, fetchAllCharactersPromiseAll2 } from './helpers/script.js';
 
 //getUsers();
 
 //getUsersAsyncAwait();
 
-getPeople();
+//getPeople();
+
+fetchAllCharactersPromiseAll2();
