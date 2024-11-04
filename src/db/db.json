@@ -1,0 +1,18 @@
+{
+    "productos": [
+      { "id": 1, "nombre": "Producto 1", "stock": 50, "precio": 29.99, "categoriaId": 1 },
+      { "id": 2, "nombre": "Producto 2", "stock": 20, "precio": 49.99, "categoriaId": 2 }
+    ],
+    "categorias": [
+      { "id": 1, "nombre": "Electrónica" },
+      { "id": 2, "nombre": "Ropa" }
+    ],
+    "comentarios": [
+      { "id": 1, "productoId": 1, "usuario": "Juan", "contenido": "Excelente producto!", "calificacion": 5 },
+      { "id": 2, "productoId": 2, "usuario": "Maria", "contenido": "Buena calidad.", "calificacion": 4 }
+    ],
+    "historialPrecios": [
+      { "productoId": 1, "precios": [29.99, 24.99, 19.99] },
+      { "productoId": 2, "precios": [49.99, 39.99] }
+    ]
+  }
