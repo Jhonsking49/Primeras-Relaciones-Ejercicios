@@ -1,9 +1,5 @@
-import { getUsers, getUsersAsyncAwait, getPeople, fetchAllCharactersAsyncAwait, fetchAllCharactersPromiseAll2 } from './helpers/script.js';
+import { fetchAllCharacterPromisesAll } from "./helpers/script.js";
 
-//getUsers();
-
-//getUsersAsyncAwait();
-
-//getPeople();
-
-fetchAllCharactersPromiseAll2();
+document.getElementById('fetchPersonajes').addEventListener('click', async () => {
+    await fetchAllCharacterPromisesAll();
+});

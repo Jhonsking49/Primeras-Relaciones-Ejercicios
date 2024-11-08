@@ -1,92 +1,199 @@
-/**
- * desarrolla una funcion que recupere todas las cartas de Pokemon de hhtp://localhost:3000/pokemons utilizando async/await y 
- * almacenandolas en un map para acceso rapido por nombre
- */
-// Función para obtener todas las cartas de Pokémon y almacenarlas en un Map usando el ID como clave
-export const getPokemons = async () => {
-    const url = 'http://localhost:3000/pokemons';
-    const pokemonMap = new Map();
 
+
+const dataURL = import.meta.env.VITE_API_POKE;
+const multiplier = import.meta.env.VITE_API_MULTIPLIER;
+
+export const receiveData = async () => {
     try {
-    const response = await fetch(url);
+        const response = await fetch(dataURL);
 
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+        if (!response.ok){
+            throw new Error('Error al obtener datos');
+        }
+
+        const data = await response.json();
+        console.log("Datos obtenidos correctamente", data);
+
+        const pokeMap = new Map();
+
+        data.forEach(carta => {
+            pokeMap.set(carta.nombre, carta)
+        });
+        console.log("Listado de cartas por nombre del pokemon: ", pokeMap);
+
+        return data;
+    }catch (error){
+        console.error(error);
     }
-
-    const pokemons = await response.json();
-
-    pokemons.forEach(pokemon => 
-        pokemonMap.set(pokemon.id, pokemon));
-
-    console.log('Pokémon cargados correctamente!');
-    } catch (error) {
-    console.error('Error fetching Pokémon cards:', error);
-    }
-
-    return pokemonMap;
 };
 
-
-
-export const addCard = async (pokemonId, quantity) => {
+export const getCard = async (idCarta) => {
     try {
-        const response = await fetch(`http://localhost:3000/pokemons/${pokemonId}`, {
+        const carta = await fetch(`${dataURL}/${idCarta}`);
+
+        if (!carta.ok){
+            throw new Error('Error al obtener la carta');
+        }
+
+        const data = await carta.json();
+        console.log("¡Carta ",data.nombre," añadida al carrito!");
+
+        // console.log("carta --",data);
+        return data;
+
+    }catch (error){
+        console.error(error);
+    }
+};
+
+export const addCard = async (nombreCarta) => {
+    try {
+        const response = await fetch(dataURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({nombre: nombreCarta})
+        });
+
+        if (!response.ok){
+            throw new Error('Error al añadir la carta');
+        }
+
+        const data = await response.json();
+        console.log("¡Carta ",data.nombre," añadida al carrito!");
+
+        return data;
+    }catch (error){
+        console.error(error);
+    }
+};
+
+export const deleteCard = async (idCarta) => {
+    try {
+        const response = await fetch(`${dataURL}/${idCarta}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok){
+            throw new Error('Error al eliminar la carta');
+        }
+
+        const data = await response.json();
+        console.log("¡Carta ",data.nombre," eliminada del carrito!");
+
+        return data;
+    }catch (error){
+        console.error(error);
+    }
+};
+
+export const updateCard = async (idCarta, nombreCarta) => {
+    try {
+        const response = await fetch(`${dataURL}/${idCarta}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ quantity }),
+            body: JSON.stringify({nombre: nombreCarta})
         });
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
+
+        if (!response.ok){
+            throw new Error('Error al actualizar la carta');
         }
+
         const data = await response.json();
-        console.log('Carta agregada correctamente:', data);
-    } catch (error) {
-        console.error('Error agregando carta:', error);
+        console.log("¡Carta ",data.nombre," actualizada!");
+
+        return data;
+    }catch (error){
+        console.error(error);
     }
 };
 
-export const removeCard = async (pokemonId) => {
+/**
+ * Filtrar Pokémon por habilidades:
+Implementa una función que filtre los Pokémon por habilidades específicas y
+devuelva aquellos que las posean.
+Utiliza Set para asegurar que no haya habilidades repetidas y usa Map para
+almacenar y devolver los resultados
+ */
+
+export const filterByAbilities = (pokemons, abilities) => {
     try {
-        const response = await fetch(`http://localhost:3000/pokemons/${pokemonId}`, {
-            method: 'DELETE',
+        const filteredPokemons = new Map();
+
+        pokemons.forEach(pokemon => {
+            // Crear un conjunto con los nombres de habilidades del Pokémon
+            const pokemonAbilities = new Set(pokemon.habilidades.map(habilidad => habilidad.nombre));
+            
+            // Verificar si alguna habilidad del Pokémon está en el conjunto de habilidades buscadas
+            const hasMatchingAbility = abilities.some(ability => pokemonAbilities.has(ability));
+
+            if (hasMatchingAbility) {
+                filteredPokemons.set(pokemon.nombre, pokemon);
+            }
         });
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        console.log('Carta eliminada correctamente:', data);
+
+        return filteredPokemons;
     } catch (error) {
-        console.error('Error eliminando carta:', error);
+        console.error("Error al filtrar Pokémon por habilidades:", error);
+        return new Map();
     }
 };
 
-export const renderCards = (pokemonMap) => {
-    const cards = document.getElementById('cards');
-    cards.innerHTML = '';
-    pokemonMap.forEach((pokemon, id) => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = `
-            <h2>${pokemon.name}</h2>
-            <p>${pokemon.description}</p>
-            <button class="btn-remove">Eliminar</button>
-        `;
-        card.querySelector('.btn-remove').addEventListener('click', () => {
-            removeCard(id);
+/**
+ * Actualizar precios en base al multiplicador:
+Crea una función para actualizar los precios de cada carta cuando cambie el
+multiplicador en db.json.
+Usa Promise.allSettled para manejar las actualizaciones de cada carta,
+asegurando que si alguna promesa falla, puedas ver el error específico de esa
+carta
+ */
+
+export const updatePrices = async (multiplier) => {
+    try {
+        const response = await fetch(multiplier);
+
+        if (!response.ok){
+            throw new Error('Error al obtener el multiplicador');
+        }
+
+        const data = await response.json();
+        console.log("Multiplicador actualizado: ", data);
+
+        const pokeMap = new Map();
+
+        data.forEach(carta => {
+            pokeMap.set(carta.nombre, carta)
         });
-        cards.appendChild(card);
-    });
+        console.log("Listado de cartas por nombre del pokemon: ", pokeMap);
+
+        return data;
+    }catch (error){
+        console.error(error);
+    }
 };
 
-export const filterPokemons = (pokemonMap, filter) => {
-    const filteredPokemonMap = new Map();
-    pokemonMap.forEach((pokemon, id) => {
-        if (pokemon.name.toLowerCase().includes(filter.toLowerCase())) {
-            filteredPokemonMap.set(id, pokemon);
+export const updatePrice = async (idCarta, precio) => {
+    try {
+        const response = await fetch(`${dataURL}/${idCarta}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({precio})
+        });
+
+        if (!response.ok){
+            throw new Error('Error al actualizar la carta');
         }
-    });
-    return filteredPokemonMap;
+
+        const data = await response.json();
+        console.log("¡Carta ",data.nombre," actualizada!");
+
+        return data;
+    }catch (error){
+        console.error(error);
+    }
 };

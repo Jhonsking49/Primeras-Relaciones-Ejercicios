@@ -94,3 +94,38 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Contenedor de la lista de tarjetas */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+/* Estilo de cada tarjeta de Pokémon */
+.pokemon-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.pokemon-card h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.pokemon-card p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 0.9em;
+}
+
+.pokemon-card strong {
+  font-weight: bold;
+  color: #444;
+}

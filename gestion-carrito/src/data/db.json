@@ -11,9 +11,7 @@
         {
           "nombre": "Ataque Rápido",
           "puntuacion": 6
-        },
-        "Quick Attack",
-        "Thunderbolt"
+        }
       ],
       "puntuacionTotal": 14,
       "precio": 28
