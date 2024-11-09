@@ -1,23 +1,25 @@
-import { getCoursesLevel,createCourse,updateCourseLevel,getAverageRating,removeCourseInProgress
-    ,getCompletedCourses,actualizarCurso,restaurarCourse } from "./scripts/script.js";
+import { getCourses, getCoursesLevel, getLevel } from "./scripts/script";
 
-const url = 'http://localhost:3500/'; // Replace with your actual API URL
+const url = import.meta.env.VITE_URL_COURSES;
 
-const datos = {
-    title: 'prueba',
-    instructor: 'isaias',
-    level: 'basico',
-    duration: 300
-};
+getCourses(url).then(courses => {
+    console.log(courses);
+});
 
-export const init = async () => {
-    try {
-        const result = await restaurarCourse(url,1,1);
-        console.log(result);
-    } catch (error) {
-        console.log("Error" + error.message);
+const btnFilterCourses = document.getElementById("btnFilterCourses");
+
+btnFilterCourses.addEventListener("click", async () => {
+    const level = prompt("Ingrese el nivel del curso");
+    if (level) {
+        const courses = await getCoursesLevel(url, level);
+        console.log(courses);
     }
-}
+});
+
+
+getLevel(url).then(level => {
+    console.log(level);
+});
 
 // export const init = async () => {
 //     // Test getCoursesLevel
